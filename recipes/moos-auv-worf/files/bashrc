@@ -1,0 +1,35 @@
+#==============================================================================
+# ~/.bashrc: executed by bash(1) for non-login shells.
+#
+# Customized for use in the U of I MOOS AUV
+#==============================================================================
+
+export PS1='\u@\h:\W$ '
+umask 022
+
+# You may uncomment the following lines if you want `ls' to be colorized:
+export LS_OPTIONS='--color=auto'
+eval `dircolors`
+alias ls='ls $LS_OPTIONS'
+alias ll='ls $LS_OPTIONS -l'
+alias l='ls $LS_OPTIONS -lA'
+
+
+# Some more alias to avoid making mistakes:
+alias rm='rm -i'
+alias cp='cp -i'
+alias mv='mv -i'
+
+alias ll='ls -lF'
+
+# Extend executable search path to include /sbin and /usr/sbin
+# since this is where gpsd and other utilities live
+export PATH=${PATH}:/sbin:/usr/sbin
+
+#-------------------------------------------
+# Add MOOS app directory and IvP Behavior 
+# directory to the executable search path
+#-------------------------------------------
+export MOOSAPPDIR='/usr/bin/MOOSApps'
+export IVP_BEHAVIOR_DIR='/usr/bin/IvPBehaviors'
+export PATH=${PATH}:${MOOSAPPDIR}

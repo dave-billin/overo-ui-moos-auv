@@ -1,0 +1,467 @@
+//=============================================================================
+// WorfStartup.moos
+//
+// This mission file is used to launch applications when the WORF gumstix
+// first boots
+//
+// Created June 2011 by Dave Billin
+//=============================================================================
+
+//==========================
+// GLOBAL SCOPE VARIABLES
+//==========================
+ServerHost = localhost      // Hostname of the MOOSDB server
+ServerPort = 9000           // Port the MOOSDB will be served on
+
+// MOOS community the AUV should be associated with
+Community = Yelsub
+
+Simulator = false   // This is definitely not a simulation...
+
+
+// The name or path of the file containing vehicle-specific settings including
+// Vehicle ID and actuator trims
+VEHICLE_CONFIG_FILE_PATH = "/usr/share/VehicleConfig.cfg"
+
+
+
+
+//=============================================================================
+ProcessConfig = ANTLER
+{
+    // pAntler launches processes for you
+    // you can specify whether or not each process gets a new window or not
+    // you can specify the name under which each process registers with MOOSDB
+    // Run = PROC_NAME @ [ NewConsole = [TRUE/FALSE] [~ MOOSNAME]]
+
+
+    //crucial processes
+    Run = MOOSDB                @ NewConsole = false
+  	//Run = iArchangelIMU         @ NewConsole = false
+  	Run = iSpock                @ NewConsole = false
+  	Run = iScotty               @ NewConsole = false
+	//Run = iXStreamRadioModem    @ NewConsole = false
+	//Run = iWhoiMicroModem       @ NewConsole = false
+
+   //this next line sets the executable paths explicitly
+   ExecutablePath = /usr/bin/MOOSApps
+
+   //this specifies an amount of time to wait after each process is launched
+   MSBetweenLaunches = 200
+}
+//---------------------------------------
+
+
+
+
+//=============================================================================
+ProcessConfig = iScotty
+{
+	//------------------------------------
+	// ** MOOS APPLICATION PARAMETERS **
+	//------------------------------------
+	
+	// AppTick determines the rate (in Hz) at which the Scotty
+	// PID controllers will be updated.
+	AppTick = 8
+
+	// CommsTick sets the number of times each second the 
+	// application checks for new mail from the MOOSDB
+	CommsTick = 10
+
+
+	//---------------------------
+	// CONNECTION SETTINGS
+	//---------------------------
+	// Hostname or IP address of the SCOTTY module
+	SCOTTY_HOSTNAME = 192.168.1.104
+	
+	// Network port to connect to on the SCOTTY module
+	SCOTTY_PORT = 20024
+	
+	
+	//---------------------------
+	// HEADING CONTROLLER GAINS
+	//---------------------------
+	YAW_PID_Kp = 0.8			// Proportional gain
+	YAW_PID_Ki = 0.0			// Integral gain
+	YAW_PID_Kd = 0.0			// Derivative gain
+	YAW_PID_IntegralSat = 0.0		// Integral saturation value
+	
+	YAW_PID_OutputSat = 1.483529839	// Maximum output value
+									// (+/- 85 degrees for rudder) 
+
+	//---------------------------
+	// SPEED CONTROLLER GAINS
+	//---------------------------
+	SPEED_PID_Kp = 1.0			// Proportional gain
+	SPEED_PID_Ki = 0.0			// Integral gain
+	SPEED_PID_Kd = 0.0			// Derivative gain
+	SPEED_PID_IntegralSat = 0.0		// Integral saturation value
+	
+	SPEED_PID_OutputSat = 100.0	// Maximum output value 
+
+
+	//---------------------------
+	// DEPTH CONTROLLER GAINS
+	//---------------------------
+	DEPTH_PID_Kp = 1.0			// Proportional gain
+	DEPTH_PID_Ki = 0.0			// Integral gain
+	DEPTH_PID_Kd = 0.0			// Derivative gain
+	DEPTH_PID_IntegralSat = 0.0	// Integral saturation value
+	DEPTH_PID_OutputSat = 1.221730476	// +/- 70 degrees
+
+
+	//---------------------------
+	// ROLL CONTROLLER GAINS
+	//---------------------------
+	ROLL_PID_Kp = 1.0			// Proportional gain
+	ROLL_PID_Ki = 0.0			// Integral gain
+	ROLL_PID_Kd = 0.0			// Derivative gain
+	ROLL_PID_IntegralSat = 0.0			// Integral saturation value
+	ROLL_PID_OutputSat = 1.483529839	// +/- Maximum output value
+										// (+/- 85 deg) for aileron 
+	
+	
+	//---------------------------
+	// PITCH CONTROLLER GAINS
+	//---------------------------
+	PITCH_PID_Kp = 1.0			// Proportional gain on pitch error
+	PITCH_PID_KpDepth = 0.0		// Proportional gain on depth controller output
+	PITCH_PID_Ki = 0.0			// Integral gain
+	PITCH_PID_Kd = 0.0			// Derivative gain
+	PITCH_PID_IntegralSat = 0.0			// Integral saturation value
+	PITCH_PID_OutputSat = 1.483529839	// +/- Maximum output value
+										// (+/- 85 deg) for elevator 
+
+	// Values used to estimate RPM-based velocity
+	VELOCITY_PER_RPM = 0.001167		
+	VELOCITY_PER_RPM_OFFSET = -0.1988;
+										
+	VERBOSITY = 0	// (optional) verbosity level of debugging messages
+}
+
+
+
+
+//=============================================================================
+ProcessConfig = iSpock
+{
+	//------------------------------------
+	// *** MOOS APPLICATION PARAMETERS
+	// How fast should iterate be called?
+	// This determines the rate at which sensor packets will be requested from
+	// the SPOCK module.
+	AppTick= 8
+
+	// How responsive should comms be?
+	CommsTick = 10
+
+	// Hostname or IP address of the SPOCK module
+	SPOCK_HOSTNAME = 192.168.1.103
+	
+	// Network port to connect to on the SPOCK module
+	SPOCK_PORT = 20023
+	
+	//VERBOSITY = 2;
+	
+	// Overrides of variables SPOCK sensors are published to
+	COMPASS_HEADING_PUBLISHTO = NAV_HEADING
+	COMPASS_YAW_PUBLISHTO = NAV_YAW
+	ACCEL_PITCH_PUBLISHTO = NAV_PITCH
+	ACCEL_ROLL_PUBLISHTO = NAV_ROLL
+	DEPTH_PUBLISHTO = NAV_DEPTH
+}
+
+
+
+
+
+//=============================================================================
+ProcessConfig = iXStreamRadioModem
+{
+	//------------------------------------------------
+	// This determines how many times per second the
+	// application's Iterate() method gets called
+	//------------------------------------------------
+	AppTick= 10		
+
+	//------------------------------------------------
+	// This determines how many times per second the
+	// application's connection to the MOOS Database
+	// gets serviced
+	//------------------------------------------------
+	CommsTick = 10
+
+	
+	//------------------------------------
+	// ** SERIAL PORT SETTINGS **
+	//	Gumstix OVERO serial ports are:
+	//
+	//	OMAP Serial Port	Value for 'Port'
+	//	-----------------	-----------------
+	//	 UART 1				  /dev/ttyS0
+	//	 UART 3				  /dev/ttyS2
+	//------------------------------------
+	Port = /dev/ttyS2
+	BaudRate = 38400	// UART baud rate [19200, 56600, 115200, etc...]
+	//Verbose = true	// Turns on extra debugging info for the serial port
+	Handshaking = false // Enable hardware handshaking [true/false]
+	Streaming = false	// [true] Use a thread to buffer data in the background
+						// [false] Use blocking calls to receive data
+
+
+	// If the vehicle ID cannot be loaded from the file specified in
+	// VEHICLE_CONFIG_FILE_PATH, this value will be used for the modem's address
+	DEFAULT_MODEM_ADDRESS = 50
+
+	// Radio network parameters
+	HOPPING_CHANNEL = 1
+	ADDRESS_MASK = 255
+	SENSOR_REPORT_PERIOD_SEC = 1
+
+
+	// MOOS variables that supply sensor values broadcast to the base station 
+	MOOSVAR_COMPASS_HEADING_DEG = NAV_HEADING
+	MOOSVAR_DEPTH_M = NAV_DEPTH
+	MOOSVAR_BATTERY_VOLTS = BATTERY_VOLTAGE
+	MOOSVAR_H20_LEAK_DETECTED = WATERLEAKISDETECTED
+	MOOSVAR_TEMPERATURE_C = TEMPERATURE
+	MOOSVAR_LONGITUDE_DEG = GPS_LONGITUDE
+	MOOSVAR_LATITUDE_DEG = GPS_LATITUDE
+	MOOSVAR_GPS_VELOCITY_MPS = GPS_VELOCITY
+	MOOSVAR_GPS_HPE_M = GPS_HPE
+	MOOSVAR_GPS_HEADING_DEG = GPS_HEADING
+	MOOSVAR_GYRO_PITCH_RAD = NAV_PITCH
+	MOOSVAR_GYRO_ROLL_RAD = NAV_ROLL
+	MOOSVAR_MISSION_NUMBER = MISSION_NUMBER
+	MOOSVAR_RUN_NUMBER = RUN_NUMBER
+	MOOSVAR_ACTUAL_THRUST_PERCENT = DESIRED_THRUST
+	MOOSVAR_LAST_ABORT_CODE = ABORT_CODE
+	MOOSVAR_LBL_BUOY_FLAGS = LBL_ActiveBuoys
+	MOOSVAR_COORDINATE_N = NAV_Y
+	MOOSVAR_COORDINATE_E = NAV_X
+
+
+	// Setting the value to TRUE will cause serial data sent to the modem to be
+	// printed to stdio
+	PRINT_SERIAL_TX = false
+
+	// Setting the value to TRUE will cause serial data received from the modem to
+	// be printed to stdio
+	PRINT_SERIAL_RX = false
+		
+}
+
+
+
+
+
+//=============================================================================
+ProcessConfig = iWhoiMicroModem
+{
+	//------------------------------------
+	// *** MOOS APPLICATION PARAMETERS
+	// How fast should iterate be called? (used by CMOOSApp)
+	AppTick= 10
+
+	// How responsive should comms be? (used by CommsClient)
+	CommsTick = 20
+
+	//------------------------------------
+	// ** SERIAL PORT SETTINGS **
+	//	For Gumstix OVERO hardware, serial ports may be 
+	//	specified as:
+	//
+	//	Value for 'Port'		OMAP Serial Port
+	//	-----------------		-------------
+	//		/dev/ttyS0				UART 1
+	//		/dev/ttyS2				UART 3
+	//------------------------------------
+	Port = /dev/ttyS0
+	BaudRate = 19200
+	Streaming = true
+	//Verbose = true
+	
+	//------------------------------------
+	// WHOI NVRAM PARAMETERS
+	// 	These parameters describe initial settings applied to the WHOI NVRAM 
+	//	configuration parameters.  See Table 5 of the "Micro-Modem Software 
+	//	Interface Guide" document for detailed information on acceptable
+	//	parameter values.
+	//------------------------------------
+	AGC = 0			// Enable automatic gain control (1=enabled; 0=disabled)
+	AGN = 255		// Analog Gain (0..255)
+	ASD = 0			// Enable sending test data when none is provided (1=enabled;0=disabled)
+//	BDD = 0			// Enable PSK Baseband data dump to serial port (1=TRUE;0=FALSE)
+
+	BND = 3			// Communications Band:
+					//		1 = A (10 kHz)
+					//		2 = B (15 kHz)
+					//		3 = C (25 kHz)
+					//		4 = D (??)
+					
+	BR2 = 3			// WHOI Aux Serial port (port 2) baud rate
+					//		0 = 2400 bps
+					//		1 = 4800 bps
+					//		2 = 9600 bps
+					//		3 = 19200 bps (default)
+					//		4 = 38400 bps
+					//		5 = 57600 bps
+					//		6 = 115200 bps
+					//		7 = 230400 bps
+					
+//	BW0 = 4000		// Bandwidth for Band 0 PSK
+	CPR = 1			// Co-processor power (0=manual; 1=auto)
+	CRL = 50		// Cycle-init reverb lockout (msec)
+	CST = 0			// Enable Rx cycle statistics message (1=TRUE;0=FALSE)
+	CTO = 10		// Cycle-init timeout (sec)
+	DBG = 0			// Enable low-level debug messages (1=TRUE;0=FALSE)
+	DGM = 0			// Enable diagnostic messaging (1=TRUE;0=FALSE)
+	DOP = 1			// Enable the CADOP message (1=TRUE;0=FALSE)
+	DQF = 1			// Enable the CADQF message (1=TRUE;0=FALSE)
+	DTH = 108		// Matched filter signal threshold, FSK
+	DTO = 2			// Data request timeout (sec)
+//	DTP = 90		// Matched filter signal threshold, PSK
+	ECD = 50		// Delay at end of cycle (ms)
+	EFF = 20		// Feed-forward taps for the LMS equalizer
+	EFB = 10		// Feedback taps for the LMS equalizer
+//	FCO = 25120		// Carrier at Band 0 PSK only
+//	FML = 40		// PSK FM probe length, symbols
+//	FMD = 1			// PSK FM probe direction (0=up; 1=down)
+	GPS = 0			// Enable GPS parser on aux. serial port (1=TRUE;0=FALSE)
+//	HFC = 0			// Enable hardware flow control on main serial port (1=TRUE;0=FALSE)
+	IRE = 0			// Print impulse response of FM sweep
+//	MOD = 0			// Mini-packet type (0=FSK; 1=PSK)
+	MFD = 1			// Enable MFD messages (1=TRUE;0=FALSE)
+	MSE = 0			// Print symbol mean squared error (dB) for the LMS equalizer	
+	MCM = 1			// Enable current mode hydrophone PSU on Rev C. analog board (1=TRUE;0=FALSE)
+	MPR = 1			// Enable power toggle on multi-channel analog board (1=TRUE;0=FALSE)
+//	MVM = 1			// Enable voltage mode hydrophone PSU on analog board (1=TRUE;0=FALSE)
+	NDT = 150		// Detect threshold for nav detector 
+	NPT = 50		// Power threshold for nav detector
+	NRL = 25		// Navigation reverb lockout (ms)
+	NRV = 150		// Number of CTO's before hard reboot
+	PAD = 2			// Power amp delay (ms)
+	PCM = 0			// Passband channel mask
+	PRL = 50		// Packet reverb lockout (ms)
+	PTH = 180		// Matched filter detector power threshold
+	POW = -100		// Detection power threshold (dB)
+	PTO = 6			// Packet timeout (sec)
+	REV = 1			// Enable the CAREV message (1=TRUE;0=FALSE)
+	RSP = -157		// Receiver gain response (dB)
+	RXA = 1			// Enable the CARXA message (1=TRUE;0=FALSE)
+	RXD = 1			// Enable the CARXD message (1=TRUE;0=FALSE)
+	RXP = 1			// Enable the CARXP message (1=TRUE;0=FALSE)	
+	SCG = 0			// Set clock from GPS
+	SGP = 0			// Show GPS messages on main serial port
+	SHF = 0			// Enable the CASHF message (1=TRUE;0=FALSE)
+	SNR = 0			// Enable SNR stats for PSK communications (1=TRUE;0=FALSE)
+	SNV = 0			// Enable synchronous transmission of packets (1=TRUE;0=FALSE)
+	SRC = 2			// *** Default Acoustic ID if not already specified in AUV_VEHICLE_ID ***
+	TAT = 50		// Navigation turn-around time (ms)
+	TOA = 0			// Enable display of packet time of arrival (1=TRUE;0=FALSE)
+	TXD = 250		// Delay before transmit (ms)
+	XST = 0			// Enable CAXST stats message (1=TRUE;0=FALSE)
+	
+	
+	
+	//------------------------------------
+	// *** WHOI COMMAND PRIORITIES ***
+	//	Commands passed to the WHOI MicroModem at runtime are
+	//	executed in order of priority based on values assigned 
+	//	here.  Highest priority is 10; lowest is 0.  Commands 
+	//	with equal priority are handled in the order in which 
+	//	they were received from the MOOS DB.  To disable 
+	//	command prioritization, simply assign all commands an
+	//	equal value.
+	
+	PRIORITY_SendUserMiniPacket = 10
+	PRIORITY_WriteASCIIData = 10
+	PRIORITY_ReadASCIIData = 10
+	PRIORITY_WriteBinaryData = 10
+	PRIORITY_ReadBinaryData = 10
+	PRIORITY_SendMiniPacketPing = 9
+	PRIORITY_SendFmSweepPing = 9
+	PRIORITY_SendRemusPing = 9
+	PRIORITY_SendNarrowBandPing = 9
+	PRIORITY_SetRealtimeClock = 8
+	PRIORITY_SetNvramParamValue = 7
+	PRIORITY_GetNvramParamValue = 7
+	PRIORITY_SetIOLineState = 6
+	PRIORITY_ModemSleep = 5
+	PRIORITY_AutoLevelAgc = 4
+	PRIORITY_MeasureNoiseLevel = 4
+	
+	
+	//---------------------------------------
+	// *** MESSAGE PARSING OPTIONS ***
+	
+	// To publish ALL received ASCII and binary data packets, set this value
+	// to "true"; Set to "false" if only received data packets addressed to the
+	// modem's acoustic network ID should be published.  Default value if not
+	// specified is "false".
+	ENABLE_PROMISCUOUS_DATARX = true
+
+	// To publish ALL received user mini-packets, set this value to "true"; Set 
+	// to "false" if only received data packets addressed to the modem's acoustic 
+	// network ID should be published.  Default value if not specified is "false".
+	ENABLE_PROMISCUOUS_MINIPACKETRX = true
+	
+	// *** END MESSAGE PARSING OPTIONS ***
+	//---------------------------------------
+	
+	
+	//------------------------------------
+	// *** WHOI DEBUG INFO ***
+	// These variables control which debugging messages get printed to stdout
+	//PRINT_MODEM_TX = true	// 'true' to print NMEA sentences sent to the modem to stdio
+	//PRINT_MODEM_RX = true	// 'true' to print NMEA sentences received from the modem to stdio
+	//PRINT_MODEM_SETTINGS = true	// 'true' to print modem settings loaded at application start
+}
+
+
+
+
+
+//=============================================================================
+ProcessConfig = iArchangelIMU
+{
+	//------------------------------------
+	// *** MOOS APPLICATION PARAMETERS
+	// How fast should iterate be called? (used by CMOOSApp)
+	AppTick= 100
+
+	// How responsive should comms be? (used by CommsClient)
+	CommsTick = 100
+
+	//----------------------------------------------------------------
+	// ** SERIAL PORT SETTINGS **
+	//	For Gumstix OVERO hardware, serial ports are typically one of 
+	//	the following:
+	//
+	//	   Port Value:			OMAP Serial Port
+	//	-----------------		-------------
+	//		/dev/ttyS0				UART 1
+	//		/dev/ttyS2				UART 3
+	//------------------------------------
+	Port = /dev/ttyS2
+	BaudRate = 460800
+	Streaming = false
+	Verbose = false
+
+	// Overrides of default variables to publish sensors to: 
+	IMU_DELTA_ROLL_ANGLE_PUBLISHTO = NAV_ROLL;
+	IMU_DELTA_PITCH_ANGLE_PUBLISHTO = NAV_PITCH;
+	
+	// Debugging verbosity
+	VERBOSITY = 1	
+}
+//=============================================================================
+
+
+
+
+
+
+

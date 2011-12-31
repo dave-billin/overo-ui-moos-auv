@@ -1,0 +1,17 @@
+#==============================================================================
+# Yelsub_StartMOOSApps
+#   An init script to start default MOOS applications at AUV startup
+#==============================================================================
+STARTUP_MISSION="/usr/share/Startup.moos"
+
+#==========================================
+# Some variables for stdio formatting
+#==========================================
+txtrst=$(tput sgr0)     # Reset colors and formatting to defaults
+txtyel=$(tput setaf 3)  # Start Yellow text
+
+printf "${txtyel}Starting MOOS Applications in %s\n${txtrst}" \
+       "${STARTUP_MISSION}"
+
+/usr/bin/MOOSApps/pAntler  & 2> /dev/null
+

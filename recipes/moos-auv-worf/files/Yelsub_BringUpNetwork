@@ -1,0 +1,32 @@
+#==============================================================================
+# Yelsub_BringUpNetwork
+#   An init script to bring up the NAT firewall and network connections on the
+#   worf Gumstix COM
+#==============================================================================
+
+#==========================================
+# Some variables for stdio formatting
+#==========================================
+txtrst=$(tput sgr0)     # Reset colors and formatting to defaults
+txtyel=$(tput setaf 3)  # Start Yellow text
+
+## The iptables settings recalled by this script should be
+## located in this file
+NATCONFIG_FILE="/etc/YellowSubNAT.conf"
+
+## Bring up network interfaces
+printf "${txtyel}Bringing up network interfaces\n${txtrst}"
+
+## Cycle both network interfaces down then up
+## followed by a 5 second pause for good measure
+ifdown eth0
+ifdown wlan0
+ifup eth0
+ifup wlan0
+sleep 5
+
+## Restore NAT settings and port-forwarding
+printf "${txtyel}Loading iptables NAT configuration from %s\n${txtrst}" \
+       "${NATCONFIG_FILE}"
+iptables-restore < ${NATCONFIG_FILE}
+
