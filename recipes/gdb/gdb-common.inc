@@ -8,7 +8,8 @@ INC_PR = "r9"
 
 inherit autotools
 
-SRC_URI = "${GNU_MIRROR}/gdb/gdb-${PV}.tar.gz"
+#SRC_URI = "${GNU_MIRROR}/gdb/gdb-${PV}.tar.gz"
+SRC_URI = "ftp://sourceware.org/pub/gdb/releases/gdb-${PV}.tar.gz"
 
 FILESPATHPKG =. "gdb-${PV}:" 
 

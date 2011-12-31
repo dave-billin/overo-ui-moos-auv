@@ -3,11 +3,23 @@ SECTION = "libs"
 LICENSE = "LGPL"
 PR ="r1"
 
-SRC_URI = "${DEBIAN_MIRROR}/main/libl/liblockfile/liblockfile_${PV}.tar.gz \
-	   file://install.patch \
-	   file://configure.patch \
-	   file://ldflags.patch \
-	   file://glibc-2.4.patch"
+#SRC_URI = "${DEBIAN_MIRROR}/main/libl/liblockfile/liblockfile_${PV}.tar.gz \
+#	   file://install.patch \
+#	   file://configure.patch \
+#	   file://ldflags.patch \
+#	   file://glibc-2.4.patch"
+
+#SRC_URI = "http://archive.debian.org/debian/pool/main/libl/liblockfile/liblockfile_1.06.tar.gz \
+#           file://install.patch \
+#           file://configure.patch \
+#           file://ldflags.patch \
+#           file://glibc-2.4.patch"
+
+SRC_URI = "http://archive.debian.org/debian/pool/main/libl/liblockfile/liblockfile_${PV}.tar.gz \
+           file://install.patch \
+           file://configure.patch \
+           file://ldflags.patch \
+           file://glibc-2.4.patch"
 
 inherit autotools
 
@@ -25,3 +37,6 @@ do_install () {
 
 SRC_URI[md5sum] = "2de88389da013488bfd31356523070c0"
 SRC_URI[sha256sum] = "14f9690328318d11f9ba13a9356a2c008bdd169b7a817f38cb7f9eb32cf7240e"
+
+#SRC_URI[md5sum] = "285c65a38e0cab1384e534bd11886cad"
+#SRC_URI[sha256sum] = "91c0951ae9d4296b3714c11b76b71c29545536c0f7dd2c12f890a3b7ca14e773"
