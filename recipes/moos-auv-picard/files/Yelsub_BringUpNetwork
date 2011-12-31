@@ -1,0 +1,20 @@
+#==============================================================================
+# Yelsub_BringUpNetwork
+#   An init script to bring up the NAT firewall and network connections on the
+#   worf Gumstix COM
+#==============================================================================
+
+#==========================================
+# Some variables for stdio formatting
+#==========================================
+txtrst=$(tput sgr0)     # Reset colors and formatting to defaults
+txtyel=$(tput setaf 3)  # Start Yellow text
+
+## Bring up network interfaces
+printf "${txtyel}Bringing up network interfaces\n${txtrst}"
+
+## Take down and bring up the network interfaces
+ifdown lo
+ifdown eth0
+ifup lo
+ifup eth0

@@ -1,0 +1,18 @@
+#==============================================================================
+# Yelsub_SetSerialPortPermissions
+#   A startup init script to open up permissions on the two OVERO peripheral 
+#   serial ports: /dev/ttyO0 and /dev/ttyO1
+#==============================================================================
+
+#==========================================
+# Some variables for stdio formatting
+#==========================================
+txtrst=$(tput sgr0)     # Reset colors and formatting to defaults
+txtyel=$(tput setaf 3)  # Start Yellow text
+
+printf "${txtyel}"
+printf "Setting serial port permissions\n"
+printf "${txtrst}"
+
+chmod 777 /dev/ttyO0
+chmod 777 /dev/ttyO1
