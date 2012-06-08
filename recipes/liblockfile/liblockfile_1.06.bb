@@ -3,23 +3,11 @@ SECTION = "libs"
 LICENSE = "LGPL"
 PR ="r1"
 
-#SRC_URI = "${DEBIAN_MIRROR}/main/libl/liblockfile/liblockfile_${PV}.tar.gz \
-#	   file://install.patch \
-#	   file://configure.patch \
-#	   file://ldflags.patch \
-#	   file://glibc-2.4.patch"
-
-#SRC_URI = "http://archive.debian.org/debian/pool/main/libl/liblockfile/liblockfile_1.06.tar.gz \
-#           file://install.patch \
-#           file://configure.patch \
-#           file://ldflags.patch \
-#           file://glibc-2.4.patch"
-
-SRC_URI = "http://archive.debian.org/debian/pool/main/libl/liblockfile/liblockfile_${PV}.tar.gz \
-           file://install.patch \
-           file://configure.patch \
-           file://ldflags.patch \
-           file://glibc-2.4.patch"
+SRC_URI = "http://snapshot.debian.org/archive/debian/20050312T000000Z/pool/main/libl/liblockfile/liblockfile_${PV}.tar.gz \
+	   file://install.patch \
+	   file://configure.patch \
+	   file://ldflags.patch \
+	   file://glibc-2.4.patch"
 
 inherit autotools
 
