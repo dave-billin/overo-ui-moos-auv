@@ -34,6 +34,9 @@ SRCFILE="/usr/share/VehicleConfig.cfg"
 # this script (typically "/etc/network/interfaces")
 DESTFILE=/etc/network/interfaces
 
+# ESSID of the wireless network to join in ad-hoc mode
+AUV_ESSID="MOOS-AUV"
+
 
 ##-----------------
 ## END VARIABLES
@@ -105,11 +108,10 @@ echo "# Wireless interface" >> ${DESTFILE}
 echo auto wlan0 >> ${DESTFILE}
 echo iface wlan0 inet static >> ${DESTFILE}
 echo "        wireless-mode Ad-hoc" >> ${DESTFILE}
-echo "        wireless-essid YellowSub" >> ${DESTFILE}
+echo "        wireless-essid ${AUV_ESSID}" >> ${DESTFILE}
 echo "        address 192.168.2."${SUBID} >> ${DESTFILE}
 echo "        network 192.168.2.0" >> ${DESTFILE}
 echo "        netmask 255.255.255.0" >> ${DESTFILE}
-echo "#        gateway 192.168.2.254" >> ${DESTFILE}
 echo "        /sbin/ifconfig wlan0 up" >> ${DESTFILE}
 echo "        post-up echo WiFi interface wlan0 is UP" >> ${DESTFILE}
 echo "        post-down echo Wifi interface wlan0 is DOWN" >> ${DESTFILE}

@@ -59,12 +59,27 @@ DEVTOOLS_INSTALL = " \
   gdb \
   gdbserver \
   lua5.1 \
+  mono \
   nano \
+  octave \
   perl \
-  python \
   task-sdk-native \
 "
 
+PYTHON_DEV_INSTALL = " \
+  python \
+  python-argparse \
+  python-docutils \
+  python-numeric \
+  python-numpy \
+  python-pyalsa \
+  python-pyqt \
+  python-pyserial \
+  python-webpy \
+  python-pysqlite2 \
+  python-pyusb \
+  python-pyxml \
+"  
 
 TOOLS_INSTALL = " \
   bash \
@@ -113,6 +128,7 @@ IMAGE_INSTALL += " \
   ${IMAGE_EXTRA_INSTALL} \
   ${DEVTOOLS_INSTALL} \
   ${TOOLS_INSTALL} \
+  ${PYTHON_DEV_INSTALL} \
  "
 
 ## Here we notify bitbake of files to be referenced in subsequent

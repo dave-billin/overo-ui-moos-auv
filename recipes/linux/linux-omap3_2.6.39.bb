@@ -14,6 +14,9 @@ SRC_URI = "git://www.sakoman.com/git/linux-omap-2.6.git;branch=omap-2.6.39;proto
            file://${BOOT_SPLASH} \
            "
 
+# DB: Explicitly set the USB OTG port to HOST mode
+MUSB_MODE = "host"
+
 do_configure_prepend() {
 
         if [ "${MUSB_MODE}" = "host" ]; then
