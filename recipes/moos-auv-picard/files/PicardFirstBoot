@@ -1,0 +1,161 @@
+#!/bin/sh
+##----------------------------------------------------------------------------
+## PicardFirstBoot
+## 
+## Author: Dave Billin
+## 
+## Description:
+##  This script gets run the first time that the picard Gumstix boots.  It is
+##  used to set up a default user account and some initial settings.
+##----------------------------------------------------------------------------
+FLAG_FILE=/home/root/.NotFirstBoot
+
+## Default vehicle ID (a.k.a. sub number)
+VEHICLE_ID=50
+
+## Path the the vehicle configuration file
+VEHICLE_CONFIG_FILE="/usr/share/VehicleConfig.cfg"
+
+DEFAULTUSER="auvuser"    # username to add
+SUDOERS_FILE=/etc/sudoers # path of the system sudoers file
+
+STARTUP_MISSION="/usr/share/Startup.moos"
+
+#==========================================
+# Some variables for stdio formatting
+#==========================================
+txtrst=$(tput sgr0)     # Reset colors and formatting to defaults
+txtred=$(tput setaf 1)  # Start Red text
+txtgrn=$(tput setaf 2)  # Start Green text
+txtyel=$(tput setaf 3)  # Start Yellow text
+txtblu=$(tput setaf 4)  # Start Blue text
+txtvio=$(tput setaf 5)  # Start Purple text
+txtcyn=$(tput setaf 6)  # Start Cyan text
+txtwht=$(tput setaf 7)  # Start White text
+
+txtbold=$(tput bold)  # Start bold text
+txtul=$(tput smul)    # Start underlining text
+txtulend=$(tput rmul) # Stop underlining text
+
+
+
+if [ ! -f ${FLAG_FILE} ]
+then
+    clear
+    printf "${txtyel}"
+    printf "=================================================================\n"
+    printf " -- picard first boot setup --\n"
+    printf "=================================================================\n"
+    printf "${txtrst}\n"
+
+    ## Prompt the user to set the vehicle ID
+    USERINPUT=" "
+    while [ "${USERINPUT}" != "y" ] && [ "${USERINPUT}" != "n" ]
+    do
+        echo
+        echo -n "Do you want to set the vehicle ID? (y/n)? "
+        read USERINPUT
+    done
+
+    if [ "${USERINPUT}" == "y" ]
+    then
+        ## Prompt the user for the vehicle ID
+        VEHICLE_ID=0
+        while [ ${VEHICLE_ID} -lt 1 ]
+        do
+            echo
+            echo -n "Enter the vehicle ID (1 to 253) "
+            read VEHICLE_ID
+
+            if [ ${VEHICLE_ID} -lt 1 ] || [ ${VEHICLE_ID} -gt 253 ]
+            then
+                VEHICLE_ID=0
+                echo "Invalid vehicle ID.  Try again!"
+            fi
+        done
+
+        echo "AUV_VEHICLE_ID = "${VEHICLE_ID} > ${VEHICLE_CONFIG_FILE}
+
+        echo
+        echo "Vehicle ID vas written to "${VEHICLE_CONFIG_FILE}
+
+        sleep 2
+    else
+
+        ## If a vehicle config file exists, read the vehicle ID and 
+        ## prompt to reset the servo trims
+        if [ -f ${VEHICLE_CONFIG_FILE} ]
+        then
+            VEHICLE_ID="$(gawk -F= '(/AUV_VEHICLE_ID/){print int($2)}' ${VEHICLE_CONFIG_FILE})"
+            echo "No changes made to servo trims in " ${VEHICLE_CONFIG_FILE}
+        else
+            echo "Vehicle ID has been assigned a default value of 50"
+            echo "AUV_VEHICLE_ID = "${VEHICLE_ID} > ${VEHICLE_CONFIG_FILE}
+        fi
+
+        sleep 2
+    fi
+
+    echo
+    echo "Setting up links for startup scripts..."
+    ln -fs /etc/Yelsub_BringUpNetwork /etc/rc5.d/S101BringUpNetwork
+    ln -fs /etc/Yelsub_RemapUART2 /etc/rc5.d/S102RemapUART2
+    ln -fs /etc/Yelsub_StartMOOSApps /etc/rc5.d/S103StartMOOSApps
+    ln -fs /etc/Yelsub_SetSerialPortPermissions /etc/rc5.d/S104PortPermissions
+
+    sleep 1
+
+    echo
+    echo "Initializing actuator servo trims..."
+    echo "SERVO_CENTER_RUDDER = 128" >> ${VEHICLE_CONFIG_FILE}
+    echo "SERVO_CENTER_ELEV_L = 128" >> ${VEHICLE_CONFIG_FILE}
+    echo "SERVO_CENTER_ELEV_R = 128" >> ${VEHICLE_CONFIG_FILE}
+    echo "SERVO_COUPLINGCOEFF = 0.5" >> ${VEHICLE_CONFIG_FILE}
+    sleep 2
+
+    ## Create a flag file so that this script doesn't run at the next login
+    echo 1 > ${FLAG_FILE}
+
+    ## Display configuration results
+    echo
+    echo "=============================="
+    echo "<< Configuration Summary >>"
+    echo "=============================="
+    echo "This vehicle's ID is "${VEHICLE_ID}
+    echo "The MOOS mission loaded at startup is ${STARTUP_MISSION}"
+    echo
+
+
+    ##-----------------------------------------------------------
+    ## Create the default user account if it does not exist
+    ##-----------------------------------------------------------
+    # If the default user account already exists, do nothing.
+    if [ -z "$(grep ${DEFAULTUSER} /etc/passwd)" ];  then
+        useradd -m ${DEFAULTUSER} 2> /dev/null
+        if [ $? -eq 0 ]; then
+            printf "Creating default user ID: ${DEFAULTUSER}\n"
+            passwd ${DEFAULTUSER}
+        fi
+
+        TMP=$(grep ^"${DEFAULTUSER}" ${SUDOERS_FILE})
+
+        # Don't add duplicate entries to the sudoers list
+        if [ -z "${TMP}" ]; then
+            # Backup the old sudoers, then append the user
+            cp ${SUDOERS_FILE} ${SUDOERS_FILE}.backup
+
+            #echo "${DEFAULTUSER}::0:0::/:/bin/bash" >> /etc/passwd
+            echo "${DEFAULTUSER} ALL=(ALL) ALL" >> /etc/sudoers
+            printf "Added ${DEFAULTUSER} to the sudoers list\n"
+        fi
+    fi
+
+
+
+    echo "Press ENTER to REBOOT and apply the new configuration"
+    read USERINPUT
+
+    ifdown eth0
+    reboot -n
+
+fi

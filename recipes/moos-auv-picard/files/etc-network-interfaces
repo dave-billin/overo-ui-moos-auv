@@ -1,0 +1,31 @@
+##----------------------------------------------------------------------------
+## /etc/network/interfaces for the PICARD Gumstix
+##
+## Author: Dave Billin
+##
+## Details
+##	PICARD is always statically configured with the address
+##	below.  His gateway should be the IP address of the
+##	(wired) ethernet port on WORF.  WORF takes care of
+##	routing between these addresses.
+##
+## History
+##	Created 07-11-2010
+##
+##----------------------------------------------------------------------------
+
+# Loopback interface
+auto lo
+iface lo inet loopback
+
+# Ethernet interface
+auto eth0
+iface eth0 inet static
+	address 192.168.1.2
+	netmask 255.255.255.0
+	network 192.168.1.0
+	gateway 192.168.1.1
+	/sbin/ifconfig eth0 up
+	post-up echo Ethernet interface eth0 is UP
+	post-down echo Ethernet interface eth0 is DOWN
+

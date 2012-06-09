@@ -1,0 +1,41 @@
+#==============================================================================
+# Yelsub_RemapUART2
+#   An init script to re-mux UART2 (/dev/ttyO1) to the GPIO_146 and GPIO_147
+#   signals on the TOBI 40-pin breakout header.
+#==============================================================================
+
+#==========================================
+# Some variables for stdio formatting
+#==========================================
+txtrst=$(tput sgr0)     # Reset colors and formatting to defaults
+txtyel=$(tput setaf 3)  # Start Yellow text
+
+printf "${txtyel}"
+printf "Re-mapping UART2 (/dev/ttyO1) to TOBI header pins\n"
+printf "${txtrst}"
+
+# Configure MCBSP3_CLKX register at address 0x48002170
+#   MCBSP3_CLKX[15:0]
+#       INPUT_ENABLE    = 1 (enabled)
+#       PULLTYPE_SELECT = 1 (pull-up)
+#       PULLUDENABLE    = 1 (enable pull-up/dn)
+#
+#   MCBSP3_CLKX[31:0]
+#       INPUT_ENABLE    = 1 (enabled)
+#       PULLTYPE_SELECT = 1 (pull-up)
+#       PULLUDENABLE    = 1 (enable pull-up/dn)
+devmem2 0x48002170 w 0x011C011C > /dev/null
+
+
+# Configure UART2_TX register at address 0x48002170
+#   UART2_TX[15:0]
+#       INPUT_ENABLE    = 0 (disabled)
+#       PULLTYPE_SELECT = 0 (pull-down)
+#       PULLUDENABLE    = 0 (disable pull-up/dn)
+#
+#   UART2_TX[31:0]
+#       INPUT_ENABLE    = 1 (enabled)
+#       PULLTYPE_SELECT = 1 (pull-up)
+#       PULLUDENABLE    = 1 (enable pull-up/dn)
+devmem2 0x48002178 w 0x01180000 > /dev/null
+
