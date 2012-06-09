@@ -1,0 +1,13 @@
+diff --git Core/MOOSGenLib/MOOSSerialPort.h Core/MOOSGenLib/MOOSSerialPort.h
+index 1386a05..e6eba3e 100644
+--- trunk/Core/MOOSGenLib/MOOSSerialPort.h
++++ trunk/Core/MOOSGenLib/MOOSSerialPort.h
+@@ -33,7 +33,7 @@
+ 
+ /*! \file MOOSSerialPort.h */
+ 
+-#if !defined(MOOSERIALPORTH)
++#if !defined(MOOSSERIALPORTH)
+ #define MOOSSERIALPORTH
+ 
+ #if _MSC_VER > 1000
