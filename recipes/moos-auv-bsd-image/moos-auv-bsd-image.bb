@@ -26,9 +26,11 @@
 
 inherit image
 
-DEPENDS = "task-base"
+DEPENDS = "task-base moos-auv-linux-bsd"
 
 IMAGE_EXTRA_INSTALL ?= ""
+
+PREFERRED_PROVIDER_virtual/kernel = "moos-auv-linux-bsd"
 
 
 AUDIO_INSTALL = " \
