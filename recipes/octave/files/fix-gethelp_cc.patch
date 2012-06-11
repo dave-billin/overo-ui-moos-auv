@@ -1,0 +1,25 @@
+diff --git scripts/gethelp.cc scripts/gethelp.cc
+index 68612b1..84f6f04 100644
+--- /scripts/gethelp.cc
++++ /scripts/gethelp.cc
+@@ -53,9 +53,9 @@ extract_help_text (void)
+   bool have_help_text = false;
+   bool in_comment = false;
+   bool discard_space = true;
+-  int c;
++  char c;
+ 
+-  while ((c = std::cin.get ()) != EOF)
++  while ( !std::cin.get(c).eof() )
+     {
+       if (begin_comment)
+ 	{
+@@ -83,7 +83,7 @@ extract_help_text (void)
+ 	      in_comment = false;
+ 	      discard_space = true;
+ 
+-	      if ((c = std::cin.get ()) != EOF)
++	      if ( !std::cin.get(c).eof() )
+ 		{
+ 		  if (c == '\n')
+ 		    break;
