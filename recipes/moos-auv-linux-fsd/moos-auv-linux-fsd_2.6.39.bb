@@ -1,6 +1,6 @@
 require linux.inc
 
-DESCRIPTION = "Linux kernel for the Back Seat Driver (BSD) module on the University of Idaho MOOS-AUV"
+DESCRIPTION = "Linux kernel for the Front Seat Driver (FSD) module on the University of Idaho MOOS-AUV"
 KERNEL_IMAGETYPE = "uImage"
 
 BOOT_SPLASH ?= "logo_linux_clut224-generic.ppm"
