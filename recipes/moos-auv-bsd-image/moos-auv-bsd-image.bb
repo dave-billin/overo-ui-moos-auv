@@ -26,12 +26,9 @@
 
 inherit image
 
-DEPENDS = "task-base moos-auv-linux-bsd"
+DEPENDS = "task-base"
 
 IMAGE_EXTRA_INSTALL ?= ""
-
-PREFERRED_PROVIDER_virtual/kernel = "moos-auv-linux-bsd"
-
 
 AUDIO_INSTALL = " \
 #  alsa-utils \
@@ -75,7 +72,6 @@ PYTHON_DEV_INSTALL = " \
   python-numeric \
   python-numpy \
   python-pyalsa \
-  python-pyqt \
   python-pyserial \
   python-webpy \
   python-pysqlite2 \
