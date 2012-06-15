@@ -15,6 +15,8 @@
 #               gdb and gdb-server packages
 # ----------------------------------------------------------
 
+PR = 1
+
 inherit image
 
 DEPENDS = "task-base"
@@ -72,7 +74,6 @@ TOOLS_INSTALL = " \
   mkfs-jffs2 \
   mtd-utils \
   mysql \
-  ntp ntpdate \
   openssh-misc \
   openssh-scp \
   openssh-ssh \
@@ -86,10 +87,15 @@ TOOLS_INSTALL = " \
   u-boot-utils \
   iptables \
   kernel-modules \
-  gpsd \
-  gps-utils \
   setserial \
   screen \
+ "
+
+GPS_UTILS_INSTALL = " \
+  gpsd \
+  gps-utils \
+  ntp \
+  ntpdate \
  "
 
 IMAGE_INSTALL += " \
@@ -100,19 +106,19 @@ IMAGE_INSTALL += " \
   ${IMAGE_EXTRA_INSTALL} \
   ${DEVTOOLS_INSTALL} \
   ${TOOLS_INSTALL} \
+  ${GPS_UTILS_INSTALL} \
  "
 
 
 SRC_URI = " \
-    file://bashrc \
-	file://etc-hosts \
-	file://etc-network-interfaces \
-    file://PicardFirstBoot \
-	file://Startup.moos \
-	file://Yelsub_BringUpNetwork \
-    file://Yelsub_RemapUART2 \
-    file://Yelsub_SetSerialPortPermissions \
-	file://Yelsub_StartMOOSApps \
+  file://bashrc \
+  file://etc-hosts \
+  file://etc-network-interfaces \
+  file://PicardFirstBoot \
+  file://Startup.moos \
+  file://Yelsub_BringUpNetwork \
+  file://Yelsub_SetSerialPortPermissions \
+  file://Yelsub_StartMOOSApps \
 "
 
 
@@ -136,8 +142,6 @@ ROOTFS_POSTPROCESS_COMMAND += " \
     cp ${WORKDIR}/PicardFirstBoot ${IMAGE_ROOTFS}/home/root/.PicardFirstBoot; \
     chmod ug+rx ${IMAGE_ROOTFS}/home/root/.PicardFirstBoot; \
     echo '/home/root/.PicardFirstBoot' >> ${IMAGE_ROOTFS}/home/root/.profile; \
-    cp ${WORKDIR}/Yelsub_RemapUART2 ${IMAGE_ROOTFS}/etc/Yelsub_RemapUART2; \
-    chmod u=rwx,go=r ${IMAGE_ROOTFS}/etc/Yelsub_RemapUART2; \
     cp ${WORKDIR}/Yelsub_BringUpNetwork ${IMAGE_ROOTFS}/etc/Yelsub_BringUpNetwork; \
     chmod 774 ${IMAGE_ROOTFS}/etc/Yelsub_BringUpNetwork; \
     cp ${WORKDIR}/Yelsub_BringUpNetwork ${IMAGE_ROOTFS}/etc/rc5.d/S101_BringUpNetwork; \

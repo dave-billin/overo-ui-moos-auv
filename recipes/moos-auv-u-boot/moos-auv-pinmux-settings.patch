@@ -1,0 +1,47 @@
+diff --git git/board/overo/overo.h-orig git/board/overo/overo.h
+index 915f15b..4291f00 100644
+--- git/board/overo/overo.h
++++ git/board/overo/overo.h
+@@ -131,9 +131,9 @@ const omap3_sysinfo sysinfo = {
+ 								 /* - SMSC911X_NRES*/\
+ 	MUX_VAL(CP(GPMC_WAIT3),		(IEN  | PTU | DIS | M4)) /*GPIO_65*/\
+  /*DSS*/\
+-	MUX_VAL(CP(DSS_PCLK),		(IDIS | PTD | DIS | M0)) /*DSS_PCLK*/\
+-	MUX_VAL(CP(DSS_HSYNC),		(IDIS | PTD | DIS | M0)) /*DSS_HSYNC*/\
+-	MUX_VAL(CP(DSS_VSYNC),		(IDIS | PTD | DIS | M0)) /*DSS_VSYNC*/\
++	MUX_VAL(CP(DSS_PCLK),		(IDIS | PTD | EN  | M4)) /*gpio_66 + pull-dn*/\
++	MUX_VAL(CP(DSS_HSYNC),		(IDIS | PTU | EN  | M4)) /*gpio_67 + pull-dn*/\
++	MUX_VAL(CP(DSS_VSYNC),		(IDIS | PTU | EN  | M4)) /*gpio_68 + pull-dn*/\
+ 	MUX_VAL(CP(DSS_ACBIAS),		(IDIS | PTD | DIS | M0)) /*DSS_ACBIAS*/\
+ 	MUX_VAL(CP(DSS_DATA0),		(IDIS | PTD | DIS | M0)) /*DSS_DATA0*/\
+ 	MUX_VAL(CP(DSS_DATA1),		(IDIS | PTD | DIS | M0)) /*DSS_DATA1*/\
+@@ -152,13 +152,13 @@ const omap3_sysinfo sysinfo = {
+ 	MUX_VAL(CP(DSS_DATA14),		(IDIS | PTD | DIS | M0)) /*DSS_DATA14*/\
+ 	MUX_VAL(CP(DSS_DATA15),		(IDIS | PTD | DIS | M0)) /*DSS_DATA15*/\
+ 	MUX_VAL(CP(DSS_DATA16),		(IDIS | PTD | DIS | M0)) /*DSS_DATA16*/\
+-	MUX_VAL(CP(DSS_DATA17),		(IDIS | PTD | DIS | M0)) /*DSS_DATA17*/\
++	MUX_VAL(CP(DSS_DATA17),		(IDIS | PTD | EN  | M4)) /*gpio_87 + pull-dn*/\
+ 	MUX_VAL(CP(DSS_DATA18),		(IDIS | PTD | DIS | M0)) /*DSS_DATA18*/\
+ 	MUX_VAL(CP(DSS_DATA19),		(IDIS | PTD | DIS | M0)) /*DSS_DATA19*/\
+-	MUX_VAL(CP(DSS_DATA20),		(IDIS | PTD | DIS | M0)) /*DSS_DATA20*/\
++	MUX_VAL(CP(DSS_DATA20),		(IDIS | PTU | EN  | M4)) /*gpio_90 + pull-up*/\
+ 	MUX_VAL(CP(DSS_DATA21),		(IDIS | PTD | DIS | M0)) /*DSS_DATA21*/\
+ 	MUX_VAL(CP(DSS_DATA22),		(IDIS | PTD | DIS | M0)) /*DSS_DATA22*/\
+-	MUX_VAL(CP(DSS_DATA23),		(IDIS | PTD | DIS | M0)) /*DSS_DATA23*/\
++	MUX_VAL(CP(DSS_DATA23),		(IDIS | PTU | EN  | M4)) /*gpio_93 + pull-up*/\
+  /*CAMERA*/\
+ 	MUX_VAL(CP(CAM_HS),		(IEN  | PTU | DIS | M0)) /*CAM_HS */\
+ 	MUX_VAL(CP(CAM_VS),		(IEN  | PTU | DIS | M0)) /*CAM_VS */\
+@@ -218,9 +218,9 @@ const omap3_sysinfo sysinfo = {
+ 	MUX_VAL(CP(MCBSP3_CLKX),	(IDIS | PTD | DIS | M1)) /*UART2_TX*/\
+ 	MUX_VAL(CP(MCBSP3_FSX),		(IEN  | PTD | DIS | M1)) /*UART2_RX*/\
+ 	MUX_VAL(CP(UART2_CTS),		(IEN  | PTD | DIS | M4)) /*GPIO_144 - LCD_EN*/\
+-	MUX_VAL(CP(UART2_RTS),		(IEN  | PTD | DIS | M4)) /*GPIO_145*/\
+-	MUX_VAL(CP(UART2_TX),		(IEN  | PTD | DIS | M4)) /*GPIO_146*/\
+-	MUX_VAL(CP(UART2_RX),		(IEN  | PTD | DIS | M4)) /*GPIO_147*/\
++	MUX_VAL(CP(UART2_RTS),		(IEN  | PTD | EN  | M4)) /*GPIO_145 + pulldn*/\
++	MUX_VAL(CP(UART2_TX),		(IDIS | PTD | DIS | M0)) /*UART2 Tx */\
++	MUX_VAL(CP(UART2_RX),		(IEN  | PTU | EN  | M0)) /*UART2 Rx + pullup*/\
+ 	MUX_VAL(CP(UART1_TX),		(IDIS | PTD | DIS | M0)) /*UART1_TX*/\
+ 	MUX_VAL(CP(UART1_RTS),		(IEN  | PTU | DIS | M4)) /*GPIO_149*/ \
+ 	MUX_VAL(CP(UART1_CTS),		(IEN  | PTU | DIS | M4)) /*GPIO_150-MMC3_WP*/\
