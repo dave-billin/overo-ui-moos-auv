@@ -1,12 +1,13 @@
 DESCRIPTION = "Chrony time synchronization"
 LICENSE = "GPL"
-CHRONY_REV="fe2cfe1faee10b3d972f79fe30b5c8ac09469409"
+#CHRONY_REV="fe2cfe1faee10b3d972f79fe30b5c8ac09469409"
 DEPENDS += "readline"
 REDEPENDS += "readline"
 
-PV = "1.23+gitr${CHRONY_REV}"
+#PV = "1.23+gitr${CHRONY_REV}"
 
-SRC_URI = "git://git.tuxfamily.org/gitroot/chrony/chrony.git;protocol=git;rev=${CHRONY_REV} \
+#SRC_URI = "git://git.tuxfamily.org/gitroot/chrony/chrony.git;protocol=git;rev=${CHRONY_REV} \
+SRC_URI = "git://git.tuxfamily.org/gitroot/chrony/chrony.git;protocol=git;tag=${PV} \
 	file://chrony_start.sh \
 	file://chrony_stop.sh \
 	file://init \

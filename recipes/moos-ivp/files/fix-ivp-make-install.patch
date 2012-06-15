@@ -1,0 +1,66 @@
+diff --git lib_behaviors/CMakeLists.txt lib_behaviors/CMakeLists.txt
+index 13dcf7f..f28fb32 100644
+--- /lib_behaviors/CMakeLists.txt
++++ /lib_behaviors/CMakeLists.txt
+@@ -10,9 +10,10 @@ SET(SRC
+ )
+ 
+ SET(HEADERS
+-  BehaviorReport.h
+-  BehaviorSet.h
+   IvPBehavior.h
++  IvPContactBehavior.h
++  LifeEvent.h
++  LifeEventHistory.h
+ )
+ 
+ # Build Library
+diff --git lib_contacts/CMakeLists.txt lib_contacts/CMakeLists.txt
+index 40928b2..38d3087 100644
+--- /lib_contacts/CMakeLists.txt
++++ /lib_contacts/CMakeLists.txt
+@@ -9,7 +9,8 @@ SET(SRC
+ )
+ 
+ SET(HEADERS
+-  ContactRecord.h
++  NodeRecord.h
++  NodeRecordUtils.h
+ )
+ 
+ # Build Library
+diff --git lib_ulogview/CMakeLists.txt lib_ulogview/CMakeLists.txt
+index 0af1ec2..a379deb 100644
+--- /lib_ulogview/CMakeLists.txt
++++ /lib_ulogview/CMakeLists.txt
+@@ -21,14 +21,22 @@ SET(SRC
+ )
+ 
+ SET(HEADERS
+-  HelmPlot.h
+-  IPF_Plot.h
+-  LogPlot.h
+-  Populator_HelmPlots.h
+-  Populator_IPF_Plot.h
+-  Populator_LogPlots.h
+-  Populator_VPlugPlots.h
+-  VPlugPlot.h
++    GeneralLauncher.h
++    HelmTPlot.h
++    IPF_TPlot.h
++    IterTPlot.h
++    LogTPlot.h
++    Populator_IPF_TPlot.h
++    Populator_LogTPlots.h
++    Populator_VPlugTPlots.h
++    PostingBuffer.h
++    StringTPlot.h
++    StringTPlotSet.h
++    TimePlot.h
++    ULV_TimeStamp.h
++    VarTPlot.h
++    VarTPlotSet.h
++    VPlugTPlot.h
+ )
+ 
+ # Build Library

@@ -12,6 +12,8 @@ SRCREV = 45183d5874942b20846fd11b7dd583f69ff4eeff
 SRC_URI = "git://www.sakoman.com/git/linux-omap-2.6.git;branch=omap-2.6.39;protocol=git \
 	   file://defconfig \
            file://${BOOT_SPLASH} \
+           file://add-pps-gpio-support.patch \
+           file://modify-board-init.patch \
            "
 
 # DB: Explicitly set the USB OTG port to HOST mode

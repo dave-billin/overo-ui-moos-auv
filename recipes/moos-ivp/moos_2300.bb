@@ -1,22 +1,29 @@
 #==============================================================================
-# moos-ivp - The IvP Autonomy Software Suite
+# moos - The MOOS (Mission-Oriented Operating Suite)
 #
-# A set of open source C++ modules and applications employing the MOOS software
-# framework to supply simulation utilities and behavior-based autonomy for
-# marine robotics applications
+# A set of open source C++ modules and applications developed at Oxford 
+# University that supply a 'middle-ware' application framework and IPC 
+# mechanism for robotics applications
 #
 # bitbake recipe created by Dave Billin (david.billin@vandals.uidaho.edu)
 #
 #==============================================================================
 
-require moos-ivp.inc
+require moos.inc
 
-#------------------------------------------------------------------------
+#========================================================================
 # For syntax and file conventions, refer to the OpenEmbedded manual at:
 #   http://www.embeddedlinux.org.cn/OEManual/
+#========================================================================
 
-# The revision ID of this bitbake recipe
-PR="r7"
+
+#----------------------------------------------------------------
+# Set the revision ID of this bitbake recipe - this ID should be 
+# incremented whenever the recipe changes to ensure bitbake will
+# check it for changes and rebuild if necessary
+#----------------------------------------------------------------
+PR="r0"
+
 
 #----------------------------------------------------------------
 # THE FOLLOWING VARIABLES AUTOMATICALLY GET SET BY BITBAKE:
@@ -38,13 +45,14 @@ PR="r7"
 #-------------------------------------------------------------
 # Define where source files should be fetched from
 #-------------------------------------------------------------
-SRC_URI = "svn://oceanai.mit.edu/svn/moos-ivp-aro/releases;module=moos-ivp-${PV};rev=HEAD;proto=https"
+SRC_URI = "svn://login2.robots.ox.ac.uk/MOOS;module=trunk;rev=${PV};proto=svn"
 
 
 #-------------------------------------------------------------
-# Apply a patch to correct the IvP make install rule
+# Add patch files to be applied to the downloaded source code
+# prior to building
 #-------------------------------------------------------------
-SRC_URI += "file://fix-ivp-make-install.patch;apply=yes"
+SRC_URI += "file://fix-moosserialport-guard.patch;apply=yes"
 
 
 #-------------------------------------------------------------
@@ -52,11 +60,11 @@ SRC_URI += "file://fix-ivp-make-install.patch;apply=yes"
 # source code (WORKDIR is the root of the downloaded source
 # file packages)
 #-------------------------------------------------------------
-S = "${WORKDIR}/moos-ivp-${PV}/ivp/src"
+S = "${WORKDIR}/trunk"
 
 
 #-----------------------------------------------------------
-# Set build type.  Valid settings are:
+# Set the CMAKE build type.  Valid settings are:
 #   "Debug"
 #   "Release"
 #   "RelWithDebugInfo"
