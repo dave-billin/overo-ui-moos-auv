@@ -55,6 +55,7 @@ DEVTOOLS_INSTALL = " \
   nano \
   perl \
   python \
+  git \
   task-sdk-native \
 "
 
@@ -92,6 +93,7 @@ TOOLS_INSTALL = " \
  "
 
 GPS_UTILS_INSTALL = " \
+  chrony \
   gpsd \
   gps-utils \
   ntp \
