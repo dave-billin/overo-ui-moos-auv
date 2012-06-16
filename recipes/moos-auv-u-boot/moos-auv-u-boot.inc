@@ -1,4 +1,4 @@
-DESCRIPTION = "U-Boot - the Universal Boot Loader"
+DESCRIPTION = "U-Boot - the Universal Boot Loader; customized for the MOOS-AUV"
 HOMEPAGE = "http://www.denx.de/wiki/U-Boot/WebHome"
 SECTION = "bootloaders"
 PRIORITY = "optional"
@@ -14,8 +14,8 @@ EXTRA_OEMAKE = "CROSS_COMPILE=${TARGET_PREFIX}"
 
 UBOOT_MACHINE ?= "${MACHINE}_config"
 UBOOT_BINARY ?= "u-boot.bin"
-UBOOT_IMAGE ?= "u-boot-${MACHINE}-${PV}-${PR}.bin"
-UBOOT_SYMLINK ?= "u-boot-${MACHINE}.bin"
+UBOOT_IMAGE ?= "moos-auv-u-boot-${MACHINE}-${PV}-${PR}.bin"
+UBOOT_SYMLINK ?= "moos-auv-u-boot-${MACHINE}.bin"
 UBOOT_MAKE_TARGET ?= "all"
 
 do_configure () {
