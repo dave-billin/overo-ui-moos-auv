@@ -1,6 +1,6 @@
 require linux.inc
 
-DESCRIPTION = "Linux kernel for the Back Seat Driver (BSD) module on the University of Idaho MOOS-AUV"
+DESCRIPTION = "Linux kernel for the Front Seat Driver (FSD) module on the University of Idaho MOOS-AUV"
 KERNEL_IMAGETYPE = "uImage"
 
 BOOT_SPLASH ?= "logo_linux_clut224-generic.ppm"
@@ -12,6 +12,8 @@ SRCREV = 45183d5874942b20846fd11b7dd583f69ff4eeff
 SRC_URI = "git://www.sakoman.com/git/linux-omap-2.6.git;branch=omap-2.6.39;protocol=git \
 	   file://defconfig \
            file://${BOOT_SPLASH} \
+           file://add-pps-gpio-support.patch \
+           file://modify-board-init.patch \
            "
 
 # DB: Explicitly set the USB OTG port to HOST mode
