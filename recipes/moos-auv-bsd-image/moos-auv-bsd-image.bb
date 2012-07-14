@@ -1,34 +1,29 @@
-# ----------------------------------------------------------
-# BitBake recipe for a custom Gumstix OVERO image used on
-# the WORF Gumstix OVERO Air COM in the University of 
-# Idaho "Yellow Sub" AUV
+#==============================================================================
+# Operating system image for the Gumstix OVERO processor on the Back Seat 
+# Driver (BSD) module in the University of Idaho MOOS-AUV
 #
-# Authors: Dave Billin, Kyle Fazzari
+# Created by Dave Billin
 #
-# History:
-#    03-10-2010 Created by KF
-#    06-30-2010 Updated to eliminate MOOS recipe reference
-#    07-02-2010 Fixed typo in build script.  Brought into
-#               agreement with KF notes from senior design
-#               project.
+# To build this image, run:
+#   bitbake moos-auv-bsd-image
 #
-#    07-06-2010 Added native compilers to image
-#    07-07-2010 Added iptables to image.  NOTE: iptables
-#               modules are not currently getting included.
-#               in the image.  Temporary fix is to re-build
-#               the omap3 kernel with iptables support.
-#
-#    09-15-2011 Removed MOOS packages, added gpsd and 
-#		gps-utils packages to image
-#
-#    09-22-2011 Updated to use Angstrom 2.6.39-r102
-# ----------------------------------------------------------
+# To deploy the image on a microSD card, you must also build u-boot and x-load:
+#   bitbake moos-auv-u-boot
+#   bitbake x-load
+#==============================================================================
+
+# Increment PR every time this recipe changes!
+PR = 1
 
 inherit image
 
 DEPENDS = "task-base"
 
+
+
 IMAGE_EXTRA_INSTALL ?= ""
+
+
 
 AUDIO_INSTALL = " \
 #  alsa-utils \
@@ -37,9 +32,13 @@ AUDIO_INSTALL = " \
 #  angstrom-zeroconf-audio \
  "
 
+
+
 BASE_INSTALL = " \
   task-base-extended \
  "
+
+
 
 FIRMWARE_INSTALL = " \
 #  linux-firmware \
@@ -48,22 +47,28 @@ FIRMWARE_INSTALL = " \
   zd1211-firmware \
  "
 
+
+
 GLES_INSTALL = " \
 #  libgles-omap3 \
  "
+
+
 
 DEVTOOLS_INSTALL = " \
   cmake \
   emacs \
   gdb \
   gdbserver \
+  git \
   lua5.1 \
-  mono \
   nano \
   octave \
   perl \
+  python \
   task-sdk-native \
 "
+
 
 PYTHON_DEV_INSTALL = " \
   python \
@@ -78,6 +83,8 @@ PYTHON_DEV_INSTALL = " \
   python-pyusb \
   python-pyxml \
 "  
+
+
 
 TOOLS_INSTALL = " \
   bash \
@@ -94,7 +101,6 @@ TOOLS_INSTALL = " \
   mkfs-jffs2 \
   mtd-utils \
   mysql \
-  ntp ntpdate \
   openssh-misc \
   openssh-scp \
   openssh-ssh \
@@ -108,15 +114,27 @@ TOOLS_INSTALL = " \
   u-boot-utils \
   iptables \
   kernel-modules \
-  gpsd \
-  gps-utils \
   setserial \
   screen \
+ "
+
+
+GPS_UTILS_INSTALL = " \
+  chrony \
+  gpsd \
+  gps-utils \
+  ntp \
+  ntpdate \
+ "
+
+
+WEBSERVER_APPS_INSTALL = " \
   lighttpd \
   lighttpd-module-fastcgi \
   php \
   php-cgi \
  "
+
 
 IMAGE_INSTALL += " \
   ${BASE_INSTALL} \
@@ -125,9 +143,13 @@ IMAGE_INSTALL += " \
   ${GLES_INSTALL} \
   ${IMAGE_EXTRA_INSTALL} \
   ${DEVTOOLS_INSTALL} \
-  ${TOOLS_INSTALL} \
   ${PYTHON_DEV_INSTALL} \
+  ${TOOLS_INSTALL} \
+  ${GPS_UTILS_INSTALL} \
+  ${WEBSERVER_APPS_INSTALL} \
  "
+
+
 
 ## Here we notify bitbake of files to be referenced in subsequent
 ## build scripts
@@ -141,10 +163,11 @@ SRC_URI = " \
   file://Startup.moos \
   file://Yelsub_BringUpNetwork \
   file://Yelsub_GenerateNetConfig \
-  file://Yelsub_RemapUART2 \
   file://Yelsub_SetSerialPortPermissions \
   file://Yelsub_StartMOOSApps \
 "
+
+
 
 ## This is the root directory for web pages served by the http server
 LIGHTTPD_DOCUMENT_ROOT = "${IMAGE_ROOTFS}/www/pages"
@@ -152,6 +175,7 @@ LIGHTTPD_DOCUMENT_ROOT = "${IMAGE_ROOTFS}/www/pages"
 IMAGE_PREPROCESS_COMMAND = "create_etc_timestamp"
 
 #ROOTFS_POSTPROCESS_COMMAND += '${@base_conditional("DISTRO_TYPE", "release", "zap_root_password; ", "",d)}'
+
 
 
 ## Here we execute commands on the root file system before it gets compressed.
@@ -196,3 +220,4 @@ ROOTFS_POSTPROCESS_COMMAND += " \
   chmod 644 ${LIGHTTPD_DOCUMENT_ROOT}/index.php; \
   echo 'net.ipv4.ip_forward = 1' >> ${IMAGE_ROOTFS}/etc/sysctl.conf; \
 "
+

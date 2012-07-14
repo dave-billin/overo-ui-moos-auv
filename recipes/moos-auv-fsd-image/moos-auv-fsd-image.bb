@@ -1,27 +1,28 @@
-# ----------------------------------------------------------
-# BitBake recipe for a custom Gumstix OVERO image used on
-# the PICARD Gumstix OVERO Earth COM in the University of 
-# Idaho "Yellow Sub" AUV
+#==============================================================================
+# Operating system image for the Gumstix OVERO processor on the Front Seat 
+# Driver (FSD) module in the University of Idaho MOOS-AUV
 #
-# Authors: Kyle Fazzari, Dave Billin
+# Created by Dave Billin
 #
-# History:
-#	03-10-2010	Created by KF
-#	06-30-2010	DB: Updated to eliminate MOOS recipe
-#	07-15-2010	DB: Major revisions and cleanup
-#	09-15-2010	DB: Removed MOOS packages and added
-#               task-native-sdk, gpsd, gps-utils
-#   10-17-2011  DB: Updated image for kernel version 2.6.39.r102 and added
-#               gdb and gdb-server packages
-# ----------------------------------------------------------
+# To build this image, run:
+#   bitbake moos-auv-bsd-image
+#
+# To deploy the image on a microSD card, you must also build u-boot and x-load:
+#   bitbake moos-auv-u-boot
+#   bitbake x-load
+#==============================================================================
 
+# Increment PR every time this recipe changes!
 PR = 1
 
 inherit image
 
 DEPENDS = "task-base"
 
+
+
 IMAGE_EXTRA_INSTALL ?= ""
+
 
 
 AUDIO_INSTALL = " \
@@ -31,9 +32,13 @@ AUDIO_INSTALL = " \
 #  angstrom-zeroconf-audio \
  "
 
+
+
 BASE_INSTALL = " \
   task-base-extended \
  "
+
+
 
 FIRMWARE_INSTALL = " \
 #  linux-firmware \
@@ -42,22 +47,44 @@ FIRMWARE_INSTALL = " \
   zd1211-firmware \
  "
 
+
+
 GLES_INSTALL = " \
 #  libgles-omap3 \
  "
+
+
 
 DEVTOOLS_INSTALL = " \
   cmake \
   emacs \
   gdb \
   gdbserver \
+  git \
   lua5.1 \
   nano \
+  octave \
   perl \
   python \
-  git \
   task-sdk-native \
 "
+
+
+
+PYTHON_DEV_INSTALL = " \
+  python \
+  python-argparse \
+  python-docutils \
+  python-numeric \
+  python-numpy \
+  python-pyalsa \
+  python-pyserial \
+  python-webpy \
+  python-pysqlite2 \
+  python-pyusb \
+  python-pyxml \
+"  
+
 
 
 TOOLS_INSTALL = " \
@@ -86,11 +113,12 @@ TOOLS_INSTALL = " \
   syslog-ng \
   task-proper-tools \
   u-boot-utils \
-  iptables \
   kernel-modules \
   setserial \
   screen \
  "
+
+
 
 GPS_UTILS_INSTALL = " \
   chrony \
@@ -100,6 +128,8 @@ GPS_UTILS_INSTALL = " \
   ntpdate \
  "
 
+
+
 IMAGE_INSTALL += " \
   ${BASE_INSTALL} \
   ${AUDIO_INSTALL} \
@@ -107,9 +137,11 @@ IMAGE_INSTALL += " \
   ${GLES_INSTALL} \
   ${IMAGE_EXTRA_INSTALL} \
   ${DEVTOOLS_INSTALL} \
+  ${PYTHON_DEV_INSTALL} \
   ${TOOLS_INSTALL} \
   ${GPS_UTILS_INSTALL} \
  "
+
 
 
 SRC_URI = " \
@@ -122,6 +154,7 @@ SRC_URI = " \
   file://Yelsub_SetSerialPortPermissions \
   file://Yelsub_StartMOOSApps \
 "
+
 
 
 ROOTFS_POSTPROCESS_COMMAND += " \
@@ -155,3 +188,4 @@ ROOTFS_POSTPROCESS_COMMAND += " \
     cp ${WORKDIR}/Yelsub_SetSerialPortPermissions ${IMAGE_ROOTFS}/etc/Yelsub_SetSerialPortPermissions; \
     chmod u=rwx,go=r ${IMAGE_ROOTFS}/etc/Yelsub_SetSerialPortPermissions; \
 "
+
