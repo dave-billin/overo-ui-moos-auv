@@ -203,8 +203,6 @@ ROOTFS_POSTPROCESS_COMMAND += " \
   cp ${WORKDIR}/DasBootConfig ${IMAGE_ROOTFS}/home/root/.DasBootConfig; \
   chmod ugo+rx ${IMAGE_ROOTFS}/home/root/.DasBootConfig; \
   echo '/home/root/.DasBootConfig' >> ${IMAGE_ROOTFS}/home/root/.profile; \
-  cp ${WORKDIR}/Yelsub_RemapUART2 ${IMAGE_ROOTFS}/etc/Yelsub_RemapUART2; \
-  chmod u=rwx,go=r ${IMAGE_ROOTFS}/etc/Yelsub_RemapUART2; \
   cp ${WORKDIR}/Yelsub_GenerateNetConfig ${IMAGE_ROOTFS}/etc/Yelsub_GenerateNetConfig; \
   chmod u=rwx,go=r ${IMAGE_ROOTFS}/etc/Yelsub_GenerateNetConfig; \
   cp ${WORKDIR}/Yelsub_BringUpNetwork ${IMAGE_ROOTFS}/etc/Yelsub_BringUpNetwork; \
